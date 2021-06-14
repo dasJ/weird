@@ -2,7 +2,7 @@
 
 This is an automated tool to get Windows 10 download URLs.
 Microsoft doesn't provide direct download links anymore, and instead expect the user to go through their website to create a link that is valid for 24 hours.
-This tool does exactly that, but automated, yielding a downloadable URL (it doesn't download the file itself, as the title suggests).
+This tool does exactly that, but automated, yielding a downloadable URL (it doesn't download the file itself, as the title would suggest).
 
 The project is heavily inspired by [FIDO](https://github.com/pbatard/Fido) but aims to provide a headless cross-platform experience.
 
@@ -10,7 +10,7 @@ The project is heavily inspired by [FIDO](https://github.com/pbatard/Fido) but a
 
 You can download any available edition for Windows.
 Since Microsoft only offers one of them on their website, crawling the website and listing the options here doesn't make a lot of sense.
-You can fetch them via the content inspector of your browser, or check [FIDO](https://github.com/pbatard/Fido/blob/master/Fido.ps1#L75) for a lot of IDs.
+You can use "latest" for the latest version or check [FIDO](https://github.com/pbatard/Fido/blob/master/Fido.ps1#L75) for a lot of IDs.
 
 ## Dependencies
 
@@ -20,10 +20,10 @@ You can fetch them via the content inspector of your browser, or check [FIDO](ht
 ## Usage
 
 ```
-usage: weird.py [-h] [-8] [-l LANGUAGE] [-L] edition
+usage: weird.py [-h] [-8] [-l LANGUAGE] [-L] [-S] edition
 
 positional arguments:
-  edition               Edition to request
+  edition               Edition to request - use "latest" for the latest version
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -31,6 +31,7 @@ optional arguments:
   -l LANGUAGE, --language LANGUAGE
                         Language to request link for
   -L, --list-langs      List languages instead of downloading
+  -S, --show-edition    Show edition number we would download (mainly useful for the latest edition)
 ```
 
 # License

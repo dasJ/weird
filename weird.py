@@ -16,11 +16,14 @@ parser.add_argument('-l', '--language',
                     type=str, default='English',
                     help='Language to request link for')
 parser.add_argument('edition',
-                    type=int,
-                    help='Edition to request')
+                    type=str,
+                    help='Edition to request - use "latest" for the latest version')
 parser.add_argument('-L', '--list-langs',
                     default=False, action='store_true',
                     help='List languages instead of downloading')
+parser.add_argument('-S', '--show-edition',
+                    default=False, action='store_true',
+                    help='Show edition number we would download (mainly useful for the latest edition)')
 args = parser.parse_args()
 
 # Prepare requests
@@ -30,6 +33,26 @@ s.headers.update({
     'User-Agent': 'Mozilla/5.0 (X11; Linux i586; rv:57.0) Gecko/1/1/2008 Firefox/57.0'
 })
 
+# Fetch latest version
+if args.edition == 'latest':
+    url = 'https://www.microsoft.com/en-us/software-download/windows10ISO'
+    resp = s.get(url)
+    assert resp.status_code == 200
+    html = BeautifulSoup(resp.text, features='html.parser')
+    edition = 0
+    for opt in html.find_all('option'):
+        value = opt['value']
+        if value == '':
+            continue
+        if int(value) > edition:
+            edition = int(value)
+else:
+    edition = args.edition
+
+if args.show_edition:
+    print(edition)
+    sys.exit(0)
+
 # Fetch languages
 url = 'https://www.microsoft.com/en-US/api/controls/contentinclude/html' + \
     '?pageId=a8f8f489-4c7f-463a-9ca6-5cff94d8d041' + \
@@ -37,7 +60,7 @@ url = 'https://www.microsoft.com/en-US/api/controls/contentinclude/html' + \
     '&segments=software-download,windows10ISO' + \
     '&query=&action=getskuinformationbyproductedition' + \
     '&sessionId={}'.format(sessionID) + \
-    '&productEditionId={}'.format(args.edition) + \
+    '&productEditionId={}'.format(edition) + \
     '&sdVersion=2'
 
 # Request all languages
